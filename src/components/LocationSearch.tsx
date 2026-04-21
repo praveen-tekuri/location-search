@@ -1,4 +1,5 @@
 import { Fragment, useState } from "react"
+import type { Place } from "../api/place";
 
 interface SearchResponse {
     features: {
@@ -12,18 +13,14 @@ interface SearchResponse {
     }[]
 }
 
-interface Place {
-    id: number,
-    name: string,
-    longitude: number,
-    latitude: number
+interface LocationSearchProps{
+    onPlaceClick: (place: Place) => void;
 }
 
-const LocationSearch = () => {
+const LocationSearch = ({onPlaceClick}: LocationSearchProps) => {
   const [term, setTerm] = useState('');
   const [places, setPlaces] = useState<Place[]>([]);
-  console.log(places);
-
+  
   const handleSubmit = async(e:React.FormEvent<HTMLFormElement>) => {
      e.preventDefault();
      const features = await searchLocation(term);
@@ -57,7 +54,7 @@ const LocationSearch = () => {
                <Fragment key={place.id}>
                    <div className="mb-5">
                     <p>{place.name}</p>
-                    <button className="bg-green-700 p-2 my-3 rounded-md text-white cursor-pointer">Go to the Place</button>
+                    <button onClick={() => onPlaceClick(place)} className="bg-green-700 p-2 my-3 rounded-md text-white cursor-pointer">Go to the Place</button>
                     <div className="border-b"></div>
                    </div>
                 </Fragment>
